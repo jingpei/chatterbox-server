@@ -15,19 +15,17 @@ var url = require("url");
 
 var results = {"results":[
   { 
-    createdAt: "2015-09-07T21:04:24.855Z", 
+    createdAt: "Mon Sep 07 2015 19:41:37 GMT-0700 (PDT)", 
     objectId: "yxrBh3qNXO", 
     roomname: "Double L", 
     text: " deployed a new form of pony #sf", 
-    updatedAt: "2015-09-07T21:04:24.855Z",
     username: "jkjkkjkj"
   }, 
   { 
-    createdAt: "2015-09-07T21:04:24.855Z", 
+    createdAt: "Mon Sep 08 2015 19:41:37 GMT-0700 (PDT)", 
     objectId: "yxrBh3qNXO", 
     roomname: "Double L", 
-    text: " deployed a new form of pony #sf", 
-    updatedAt: "2015-09-07T21:04:24.855Z",
+    text: " hi there #sf", 
     username: "jkjkkjkj"
   }
 ]}
@@ -105,9 +103,18 @@ var requestHandler = function(request, response) {
     });
 
     request.addListener('end', function(){
-      // Write the header
+      // Add the current time to the chat 
+      postData.createdAt = new Date();
+
+      // Add an object id to the chat
+      postData.objectId = generateID(10);
+
+      // Store in the server
       results["results"].unshift(JSON.parse(postData));
+
+      // Write the header
       response.writeHead(responseData.statusCode, responseData.headers);
+      
       // End the response and send the posted data
       response.end(postData);
     })
@@ -128,6 +135,16 @@ var defaultCorsHeaders = {
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
   "access-control-allow-headers": "content-type, accept",
   "access-control-max-age": 10 // Seconds.
+};
+
+
+var generateID = function(n) {
+  var characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  var id = "";
+  for (var i = 0; i < n; i++) {
+    id += characters[Math.floor(Math.random() * characters.length)];
+  }
+  return id;
 };
 
 exports.requestHandler = requestHandler;
