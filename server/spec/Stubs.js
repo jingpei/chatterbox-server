@@ -18,6 +18,7 @@ module.exports = {
     }.bind(this);
   },
 
+  // request obj { url: "" , method: "GET", _postData: data}
   request: function(url, method, postdata) {
     this.url = url;
     this.method = method;
